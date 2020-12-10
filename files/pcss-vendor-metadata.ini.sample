@@ -1,0 +1,29 @@
+[DEFAULT]
+debug = False
+listen = 0.0.0.0
+port = 9090
+api_paste_config = /etc/pcss-vendor-metadata/pcss-vendor-metadata-api-paste.ini
+
+[keystone_authtoken]
+memcached_servers =
+cafile =
+project_domain_name =
+project_name =
+user_domain_name =
+password =
+username =
+auth_url =
+auth_type =
+service_token_roles_required =
+delay_auth_decision = False
+
+[neutron]
+cafile =
+project_domain_id =
+user_domain_id =
+project_name =
+password =
+username =
+auth_url =
+auth_type =
+region_name =

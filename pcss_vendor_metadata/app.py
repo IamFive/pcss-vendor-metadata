@@ -1,17 +1,11 @@
 #!/usr/bin/python
 import json
-import sys
 
 from oslo_log import log
-from paste import httpserver
-from paste.deploy import loadapp
 from webob import Response
 from webob.dec import wsgify
 
-from pcss_vendor_metadata import constants
-from pcss_vendor_metadata import version
 from pcss_vendor_metadata.common import neutron_client
-from pcss_vendor_metadata.conf import CONF
 from pcss_vendor_metadata.i18n import _
 
 LOG = log.getLogger(__name__)
@@ -112,31 +106,3 @@ def application(req):
     except Exception as e:
         LOG.exception(_("Failed to process request: %(req)s"), {'req': req})
         return Response('Internal Server Error', status=500)
-
-
-def main():
-    log.register_options(CONF)
-
-    # Parse our config
-    CONF(sys.argv[1:], project=constants.PROJECT_NAME,
-         version=version.version_info.release_string())
-
-    if CONF.debug:
-        # Make keystone-middleware emit debug logs
-        extra_default_log_levels = ['keystonemiddleware=DEBUG']
-        log.set_defaults(default_log_levels=(log.get_default_log_levels() +
-                                             extra_default_log_levels))
-
-    # Set us up to log as well
-    log.setup(CONF, constants.PROJECT_NAME)
-    if CONF.debug:
-        CONF.log_opt_values(LOG, log.DEBUG)
-
-    # Start the web server
-    wsgi_app = loadapp('config:paste.ini', relative_to='.',
-                       name=constants.PROJECT_NAME)
-    httpserver.serve(wsgi_app, host='0.0.0.0', port=8888)
-
-
-if __name__ == '__main__':
-    sys.exit(main())

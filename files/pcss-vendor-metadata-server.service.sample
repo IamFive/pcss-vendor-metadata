@@ -1,0 +1,14 @@
+[Unit]
+Description=PCSS Nova Vendor Metadata Service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+NotifyAccess=all
+TimeoutStartSec=0
+Restart=always
+User=nova
+ExecStart=/usr/bin/pcss-vendor-metadata-svc
+
+[Install]
+WantedBy=multi-user.target
