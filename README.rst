@@ -13,7 +13,7 @@ as
 How it works
 ============
 
-This project is designed according to official `NOVA vendor data`_ document.
+This project is designed according to official `NOVA vendordata`_ document.
 
 The vendordata feature provides a way to pass vendor or deployment-specific
 information to instances. This can be accessed by users using the metadata
@@ -33,9 +33,9 @@ The DynamicJSON vendordata transmits as fellow:
                                                   load DynamicJSON vendordata
                                                               |
                                                               V
-    +----------------------+      Query Mlnx       +----------+----------+
-    + Neutron Service API  +<----   SR-IOV  -------+ Vendor Metadata API +
-    +----------------------+    binding details    +---------------------+
+    +----------------------+      Query Mlnx       +----------+----------+
+    + Neutron Service API  +<----   SR-IOV  -------+ Vendor Metadata API +
+    +----------------------+    binding details    +---------------------+
 
 
 The DynamicJSON vendordata is a bit different from other metadata, cloud-init
@@ -49,11 +49,11 @@ The `mellanox-sriov` element uses a customized init service to load
 DynamicJSON vendordata and creates Mellanox SR-IOV ports dynamically.
 
 
-NOTE::
+Note::
 
-    Reading both user and admin guid of `NOVA vendor data`_ before using this
-    service, and `Michael Still's talk`_ from the Queens summit in Sydney will
-    give you more details about how the whole workflow works.
+Reading both user and admin guid of `NOVA vendor data`_ before using this
+service, and `Michael Still's talk`_ from the Queens summit in Sydney will
+give you more details about how the whole workflow works.
 
 
 Installation
@@ -165,7 +165,8 @@ Other Options
 
 This project also uses several other components that has configuration options:
 
-- keystonemiddleware: This package contains middleware modules designed to
+- keystonemiddleware:
+    This package contains middleware modules designed to
     provide authentication and authorization features to web services other
     than Keystone.
 
@@ -176,7 +177,8 @@ This project also uses several other components that has configuration options:
         # for keystonemiddleware (required)
         $ oslo-config-generator --namespace keystonemiddleware.auth_token
 
-- oslo.service: oslo.service provides a framework for defining new
+- oslo.service:
+    oslo.service provides a framework for defining new
     long-running services using the patterns established by other OpenStack
     applications. It also includes utilities long-running applications
     might need for working with SSL or WSGI, performing periodic operations,
@@ -206,8 +208,29 @@ This project also uses several other components that has configuration options:
         #api_paste_config = api-paste.ini
 
 
+Integration
+===========
 
+Document `NOVA Metadata Service`_ describes how to config and enable Nova
+metadata service, and `NOVA vendordata`_ document can help you setup Dynamic
+vendordata metadata service.
+
+Be caution that to cooperation with `mellanox-sriov` element mentioned upon,
+the dynamic target name should be `mlnx_sriov`. So, the final configuration
+may looks like:
+
+.. code-block:: ini
+
+    [api]
+    vendordata_providers=DynamicJSON,...
+    vendordata_dynamic_targets=mlnx_sriov@http://domain:9090,....
+
+    [vendordata_dynamic_auth]
+    ....
+
+
+.. _NOVA Metadata Service: https://docs.openstack.org/nova/latest/admin/metadata-service.html
 .. _PCSS vendor metadata: https://github.com/IamFive/pcss-vendor-metadata
-.. _NOVA vendor data: https://docs.openstack.org/nova/train/admin/vendordata.html
+.. _NOVA vendordata: https://docs.openstack.org/nova/train/admin/vendordata.html
 .. _Michael Still's talk: https://www.openstack.org/videos/summits/sydney-2017/metadata-user-data-vendor-data-oh-my
 .. _DIB FOR PCSS: https://github.com/IamFive/diskimage-builder/tree/pcss/diskimage_builder
