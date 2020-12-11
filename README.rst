@@ -110,6 +110,8 @@ If `systemd` init system is used, to run metadata service with systemd:
    $ cd /etc/pcss-vendor-metadata
    $ sudo cp pcss-vendor-metadata-server.service.sample \
         /usr/lib/systemd/system/pcss-vendor-metadata-server.service
+   $ groupadd nova
+   $ useradd -g nova nova
    $ sudo systemctl enable pcss-vendor-metadata-server.service
    $ sudo systemctl start pcss-vendor-metadata-server.service
 
